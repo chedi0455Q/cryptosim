@@ -5,19 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CryptoSim — Trading Simulator</title>
 
-  <!-- Tailwind CSS CDN -->
+
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Chart.js CDN -->
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-  <!-- Google Fonts : JetBrains Mono (monospace pro) + Syne (display) -->
+ 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
 
   <script>
-    /* ─── Tailwind custom config ─────────────────────────────────── */
+   
     tailwind.config = {
       theme: {
         extend: {
@@ -47,7 +47,6 @@
   </script>
 
   <style>
-    /* ─── Base ───────────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
       background: #090d14;
@@ -57,7 +56,7 @@
       overflow-x: hidden;
     }
 
-    /* Subtle grid background */
+
     body::before {
       content: '';
       position: fixed;
@@ -70,7 +69,7 @@
       z-index: 0;
     }
 
-    /* Glow accent top-left */
+  
     body::after {
       content: '';
       position: fixed;
@@ -81,12 +80,12 @@
       z-index: 0;
     }
 
-    /* ─── Scrollbar ──────────────────────────────────────────────── */
+
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: #090d14; }
     ::-webkit-scrollbar-thumb { background: #1c2a3a; border-radius: 2px; }
 
-    /* ─── Cards ──────────────────────────────────────────────────── */
+
     .card {
       background: #0f1623;
       border: 1px solid #1c2a3a;
@@ -103,11 +102,11 @@
       pointer-events: none;
     }
 
-    /* ─── Stat badge ─────────────────────────────────────────────── */
+
     .stat-label { color: #4a6080; font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; }
     .stat-value { font-size: 1.45rem; font-weight: 700; letter-spacing: -.02em; }
 
-    /* ─── Buttons ────────────────────────────────────────────────── */
+   
     .btn {
       display: inline-flex; align-items: center; justify-content: center;
       padding: .6rem 1.5rem;
@@ -150,7 +149,7 @@
     }
     .btn-reset:hover { color: #c8d8e8; border-color: #4a6080; }
 
-    /* ─── Price ticker ───────────────────────────────────────────── */
+ 
     #price-display {
       font-family: 'Syne', sans-serif;
       font-size: 2.6rem;
@@ -159,10 +158,8 @@
       transition: color .25s ease;
     }
 
-    /* ─── Trend arrow ────────────────────────────────────────────── */
     #trend-arrow { font-size: 1rem; transition: all .25s ease; }
 
-    /* ─── Transaction log ────────────────────────────────────────── */
     #tx-log { max-height: 200px; overflow-y: auto; }
     .tx-item {
       display: flex;
@@ -177,7 +174,6 @@
     .tx-buy  { background: rgba(0,255,163,.05); border-color: rgba(0,255,163,.12); }
     .tx-sell { background: rgba(255,61,107,.05); border-color: rgba(255,61,107,.12); }
 
-    /* ─── Quantity input ─────────────────────────────────────────── */
     #qty-input {
       background: #090d14;
       border: 1px solid #1c2a3a;
@@ -192,10 +188,10 @@
     }
     #qty-input:focus { border-color: rgba(0,229,255,.4); }
 
-    /* ─── P&L bar ────────────────────────────────────────────────── */
+
     #pnl-bar-fill { transition: width .4s ease, background .4s ease; }
 
-    /* ─── Crypto selector ────────────────────────────────────────── */
+   
     .crypto-btn {
       padding: .35rem .9rem;
       border-radius: 6px;
@@ -216,20 +212,19 @@
       background: rgba(0,229,255,.07);
     }
 
-    /* ─── Flicker animation for live dot ────────────────────────── */
     @keyframes flicker {
       0%,100% { opacity: 1; } 50% { opacity: .3; }
     }
     .live-dot { animation: flicker 1.8s ease-in-out infinite; }
 
-    /* ─── Responsive chart wrapper ───────────────────────────────── */
+
     .chart-wrapper { position: relative; width: 100%; height: 280px; }
   </style>
 </head>
 
 <body class="p-4 md:p-8">
 
-  <!-- ══════════════════════ HEADER ══════════════════════ -->
+
   <header class="relative z-10 flex items-center justify-between mb-8 flex-wrap gap-4">
     <div>
       <h1 class="font-display text-2xl font-extrabold tracking-tight text-white">
@@ -238,27 +233,26 @@
       <p class="text-muted text-xs mt-1 tracking-widest uppercase">Paper Trading Simulator · BTS SIO Portfolio</p>
     </div>
 
-    <!-- Crypto selector -->
+  
     <div class="flex gap-2 flex-wrap" id="crypto-selector">
       <button class="crypto-btn active" data-crypto="BTC">₿ BTC</button>
       <button class="crypto-btn" data-crypto="ETH">Ξ ETH</button>
       <button class="crypto-btn" data-crypto="SOL">◎ SOL</button>
     </div>
 
-    <!-- Live indicator -->
+
     <div class="flex items-center gap-2 text-xs text-muted">
       <span class="live-dot w-2 h-2 rounded-full bg-green block"></span>
       LIVE SIM
     </div>
   </header>
 
-  <!-- ══════════════════════ MAIN GRID ══════════════════════ -->
+ 
   <div class="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-4">
 
-    <!-- ── Col 1-2 : Chart + price ── -->
     <div class="lg:col-span-2 flex flex-col gap-4">
 
-      <!-- Price card -->
+   
       <div class="card p-5 flex items-start justify-between flex-wrap gap-4">
         <div>
           <p class="stat-label mb-2" id="asset-label">Bitcoin · BTC/EUR</p>
@@ -287,7 +281,7 @@
         </div>
       </div>
 
-      <!-- Chart card -->
+
       <div class="card p-5 flex-1">
         <div class="chart-wrapper">
           <canvas id="priceChart"></canvas>
@@ -296,10 +290,9 @@
 
     </div>
 
-    <!-- ── Col 3 : Trading panel ── -->
+
     <div class="flex flex-col gap-4">
 
-      <!-- Portfolio card -->
       <div class="card p-5">
         <p class="stat-label mb-4">Portfolio</p>
         <div class="grid grid-cols-2 gap-4 mb-4">
@@ -313,7 +306,7 @@
           </div>
         </div>
 
-        <!-- Total value + P&L -->
+        
         <div class="border-t border-border pt-4 mb-4">
           <div class="flex justify-between items-center mb-1">
             <p class="stat-label">Valeur totale</p>
@@ -323,7 +316,7 @@
             <p class="stat-label">P&amp;L</p>
             <p class="font-mono text-sm font-bold" id="pnl-display">+0.00 €</p>
           </div>
-          <!-- P&L progress bar -->
+       
           <div class="mt-3 h-1.5 rounded-full bg-border overflow-hidden">
             <div id="pnl-bar-fill" class="h-full rounded-full bg-green" style="width:50%"></div>
           </div>
@@ -332,18 +325,16 @@
           </div>
         </div>
 
-        <!-- Avg buy price -->
         <div class="text-xs text-muted flex justify-between">
           <span>Prix moyen d'achat</span>
           <span id="avg-buy-display" class="text-white">—</span>
         </div>
       </div>
 
-      <!-- Trade card -->
       <div class="card p-5">
         <p class="stat-label mb-4">Passer un ordre</p>
 
-        <!-- Quantity -->
+  
         <div class="mb-4">
           <label class="stat-label block mb-2">Quantité</label>
           <input id="qty-input" type="number" min="0.0001" step="0.0001" value="0.01" placeholder="0.01" />
@@ -352,7 +343,7 @@
           </p>
         </div>
 
-        <!-- Quick amounts -->
+   
         <div class="flex gap-2 mb-4 flex-wrap">
           <button class="quick-btn crypto-btn" data-pct="0.25">25%</button>
           <button class="quick-btn crypto-btn" data-pct="0.5">50%</button>
@@ -360,23 +351,21 @@
           <button class="quick-btn crypto-btn" data-pct="1">MAX</button>
         </div>
 
-        <!-- BUY / SELL -->
+     
         <div class="flex gap-3">
           <button class="btn btn-buy flex-1" id="btn-buy">▲ Acheter</button>
           <button class="btn btn-sell flex-1" id="btn-sell">▼ Vendre</button>
         </div>
 
-        <!-- Feedback -->
         <p id="trade-feedback" class="text-center text-xs mt-3 h-4 transition-all"></p>
       </div>
 
-      <!-- Reset -->
+   
       <button class="btn btn-reset w-full" id="btn-reset">↺ Réinitialiser la session</button>
 
     </div>
   </div>
 
-  <!-- ══════════════════════ TRANSACTION LOG ══════════════════════ -->
   <div class="relative z-10 mt-4">
     <div class="card p-5">
       <p class="stat-label mb-3">Historique des transactions</p>
@@ -386,56 +375,28 @@
     </div>
   </div>
 
-  <!-- ══════════════════════ FOOTER ══════════════════════ -->
   <footer class="relative z-10 mt-6 text-center text-xs text-muted">
     CryptoSim · Projet Portfolio BTS SIO — Simulation uniquement, aucune donnée réelle · Prix générés via mouvement brownien géométrique
   </footer>
 
 
-  <!-- ════════════════════════════════════════════════════════════════
-       JAVASCRIPT — Moteur de simulation & logique de jeu
-  ════════════════════════════════════════════════════════════════════ -->
   <script>
   'use strict';
 
-  /* ──────────────────────────────────────────────────────────────────
-     1. CONFIGURATION DES ACTIFS
-     Chaque crypto a ses propres paramètres de simulation :
-       - startPrice  : Prix de départ (en €)
-       - mu          : Dérive (tendance moyenne, drift) — influence la direction générale
-       - sigma       : Volatilité (écart-type des rendements) — plus élevé = plus chaotique
-       - label       : Nom affiché dans l'interface
-  ────────────────────────────────────────────────────────────────── */
   const ASSETS = {
     BTC: { startPrice: 62_400, mu: 0.0002, sigma: 0.012, label: 'Bitcoin · BTC/EUR',  symbol: 'BTC' },
     ETH: { startPrice:  3_280, mu: 0.0001, sigma: 0.015, label: 'Ethereum · ETH/EUR', symbol: 'ETH' },
     SOL: { startPrice:    148, mu: 0.0003, sigma: 0.022, label: 'Solana · SOL/EUR',   symbol: 'SOL' },
   };
 
-  /* ──────────────────────────────────────────────────────────────────
-     2. MOUVEMENT BROWNIEN GÉOMÉTRIQUE (GBM)
-     Modèle financier classique utilisé en finance quantitative.
-     Formule : P(t+Δt) = P(t) · exp((μ - σ²/2)·Δt + σ·√Δt·Z)
-       - μ (mu)    : dérive — espérance de rendement
-       - σ (sigma) : volatilité — dispersion des rendements
-       - Z         : variable aléatoire normale standard N(0,1)
-       - Δt        : pas de temps (ici 1 tick = ~1 seconde normalisée)
-     On utilise la Box-Muller transform pour générer Z depuis Math.random().
-  ────────────────────────────────────────────────────────────────── */
+
   function boxMuller() {
-    // Transforme deux uniformes U(0,1) en une normale standard N(0,1)
     const u1 = Math.random();
     const u2 = Math.random();
     return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
   }
 
-  /**
-   * Calcule le prochain prix avec le GBM.
-   * @param {number} currentPrice  Prix actuel
-   * @param {number} mu            Dérive annualisée (on utilise par tick)
-   * @param {number} sigma         Volatilité par tick
-   * @returns {number}             Nouveau prix
-   */
+
   function nextPrice(currentPrice, mu, sigma) {
     const dt = 1;                    // Pas de temps (1 tick)
     const Z  = boxMuller();          // Choc aléatoire normal
@@ -444,41 +405,32 @@
     return currentPrice * Math.exp(drift + shock);
   }
 
-  /* ──────────────────────────────────────────────────────────────────
-     3. ÉTAT DE L'APPLICATION
-  ────────────────────────────────────────────────────────────────── */
-  const MAX_POINTS = 120;   // Nombre de points max affichés sur le graphique
+
+  const MAX_POINTS = 120;   
 
   const state = {
-    // Actif courant
+    
     crypto: 'BTC',
 
-    // Prix & historique
+
     price:      0,
     priceHigh:  -Infinity,
     priceLow:   +Infinity,
-    priceHistory: [],      // Tableau des prix (pour le graphe)
-    prevPrice:  0,         // Prix au tick précédent (pour la couleur)
+    priceHistory: [],      
+    prevPrice:  0,        
 
-    // Portefeuille
-    cash:       1_000,     // Argent disponible en €
-    holdings:   0,         // Quantité de crypto détenue
-    avgBuy:     0,         // Prix moyen d'achat pondéré
-    totalSpent: 0,         // Total investi (pour le calcul avg)
+    cash:       1_000,   
+    holdings:   0,         
+    avgBuy:     0,         
+    totalSpent: 0,         
 
-    // Session
     initialCapital: 1_000,
 
-    // Intervalle de simulation
     intervalId: null,
   };
 
-  /* ──────────────────────────────────────────────────────────────────
-     4. INITIALISATION DU GRAPHIQUE Chart.js
-  ────────────────────────────────────────────────────────────────── */
   const ctx = document.getElementById('priceChart').getContext('2d');
 
-  // Gradient vertical pour le remplissage sous la courbe
   function makeGradient(color) {
     const grad = ctx.createLinearGradient(0, 0, 0, 280);
     grad.addColorStop(0, color + '33');
@@ -496,16 +448,16 @@
         borderColor:     '#00e5ff',
         backgroundColor: makeGradient('#00e5ff'),
         borderWidth:     2,
-        pointRadius:     0,        // Pas de points visibles (perf + esthétique)
+        pointRadius:     0,        
         pointHoverRadius:4,
-        tension:         0.35,     // Courbe lissée (spline cubique)
+        tension:         0.35,     
         fill:            true,
       }],
     },
     options: {
       responsive:          true,
       maintainAspectRatio: false,
-      animation:           { duration: 0 }, // Désactivé pour fluidité temps réel
+      animation:           { duration: 0 }, 
       interaction:         { mode: 'index', intersect: false },
       plugins: {
         legend: { display: false },
@@ -522,7 +474,7 @@
       },
       scales: {
         x: {
-          display: false,         // Axe X masqué (labels de temps peu utiles)
+          display: false,        
         },
         y: {
           position: 'right',
@@ -542,11 +494,7 @@
     },
   });
 
-  /* ──────────────────────────────────────────────────────────────────
-     5. UTILITAIRES D'AFFICHAGE
-  ────────────────────────────────────────────────────────────────── */
 
-  /** Formate un nombre en chaîne lisible avec espace comme séparateur des milliers */
   function formatPrice(n) {
     if (n >= 1000) return n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     if (n >= 10)   return n.toFixed(2);
@@ -557,7 +505,6 @@
     return n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
-  /** Calcule l'écart-type (volatilité réalisée) des N derniers rendements log */
   function computeRealizedVol(prices) {
     if (prices.length < 2) return 0;
     const returns = [];
@@ -566,24 +513,19 @@
     }
     const mean = returns.reduce((s, r) => s + r, 0) / returns.length;
     const variance = returns.reduce((s, r) => s + (r - mean) ** 2, 0) / (returns.length - 1);
-    return Math.sqrt(variance) * 100;  // En pourcentage
+    return Math.sqrt(variance) * 100; 
   }
 
-  /* ──────────────────────────────────────────────────────────────────
-     6. MISE À JOUR DE L'INTERFACE
-  ────────────────────────────────────────────────────────────────── */
   function updateUI() {
     const asset = ASSETS[state.crypto];
     const price = state.price;
     const priceDiff = price - state.prevPrice;
     const pricePct  = state.prevPrice > 0 ? (priceDiff / state.prevPrice) * 100 : 0;
 
-    // Couleur et flèche selon la direction du prix
     const isUp     = priceDiff >= 0;
     const color    = isUp ? '#00ffa3' : '#ff3d6b';
     const arrow    = isUp ? '▲' : '▼';
 
-    // Affichage du prix principal
     const priceEl = document.getElementById('price-display');
     priceEl.textContent = formatPrice(price) + ' €';
     priceEl.style.color = color;
@@ -593,16 +535,13 @@
     document.getElementById('pct-change').textContent  = (isUp ? '+' : '') + pricePct.toFixed(3) + '%';
     document.getElementById('pct-change').style.color  = color;
 
-    // Mini statistiques de session
     document.getElementById('asset-label').textContent = asset.label;
     document.getElementById('stat-high').textContent   = formatPrice(state.priceHigh) + ' €';
     document.getElementById('stat-low').textContent    = formatPrice(state.priceLow)  + ' €';
 
-    // Volatilité réalisée (écart-type des 20 derniers rendements)
     const vol = computeRealizedVol(state.priceHistory.slice(-20));
     document.getElementById('stat-vol').textContent = vol.toFixed(3) + '%';
 
-    // Portfolio
     const totalValue = state.cash + state.holdings * price;
     const pnl        = totalValue - state.initialCapital;
     const pnlPct     = (pnl / state.initialCapital) * 100;
@@ -617,53 +556,39 @@
     pnlEl.textContent = (pnl >= 0 ? '+' : '') + formatCash(pnl) + ' €';
     pnlEl.style.color = pnlColor;
 
-    // Barre de progression P&L : 0% au centre, -100% à gauche, +100% à droite
-    // On mappe pnlPct de [-100, +100] vers [0%, 100%] (largeur de la barre)
     const clampedPct = Math.max(-100, Math.min(100, pnlPct));
     const barWidth   = ((clampedPct + 100) / 200) * 100;  // [0..100]%
     const barEl = document.getElementById('pnl-bar-fill');
     barEl.style.width      = barWidth + '%';
     barEl.style.background = pnl >= 0 ? '#00ffa3' : '#ff3d6b';
 
-    // Prix moyen d'achat
     const avgBuyEl = document.getElementById('avg-buy-display');
     avgBuyEl.textContent = state.avgBuy > 0 ? formatPrice(state.avgBuy) + ' €' : '—';
 
-    // Coût estimé de l'ordre
     const qty = parseFloat(document.getElementById('qty-input').value) || 0;
     document.getElementById('order-cost').textContent = formatCash(qty * price);
 
-    // Boutons actifs / inactifs
     document.getElementById('btn-sell').disabled = state.holdings <= 0;
 
-    // Graphique : couleur dynamique selon hausse/baisse
     const lineColor = isUp ? '#00ffa3' : '#ff3d6b';
     chart.data.datasets[0].borderColor     = lineColor;
     chart.data.datasets[0].backgroundColor = makeGradient(lineColor.slice(0,7));
-    chart.update('none');  // Mise à jour sans animation
+    chart.update('none'); 
   }
 
-  /* ──────────────────────────────────────────────────────────────────
-     7. TICK DE SIMULATION
-     Appelé toutes les 800ms pour générer un nouveau prix.
-  ────────────────────────────────────────────────────────────────── */
+
   function tick() {
     const asset = ASSETS[state.crypto];
 
     state.prevPrice = state.price;
-
-    // Génère le prochain prix avec le GBM
     state.price = nextPrice(state.price, asset.mu, asset.sigma);
 
-    // Met à jour les extremes de session
     if (state.price > state.priceHigh) state.priceHigh = state.price;
     if (state.price < state.priceLow)  state.priceLow  = state.price;
 
-    // Historique pour le graphe (fenêtre glissante)
     state.priceHistory.push(state.price);
     if (state.priceHistory.length > MAX_POINTS) state.priceHistory.shift();
 
-    // Synchronise Chart.js
     const now = new Date().toLocaleTimeString('fr-FR');
     chart.data.labels.push(now);
     chart.data.datasets[0].data.push(state.price);
@@ -675,11 +600,7 @@
     updateUI();
   }
 
-  /* ──────────────────────────────────────────────────────────────────
-     8. LOGIQUE DE TRADING
-  ────────────────────────────────────────────────────────────────── */
 
-  /** Affiche un message de feedback temporaire */
   function feedback(msg, color = '#00ffa3') {
     const el = document.getElementById('trade-feedback');
     el.textContent = msg;
@@ -687,11 +608,9 @@
     setTimeout(() => { el.textContent = ''; }, 3000);
   }
 
-  /** Ajoute une entrée dans le journal des transactions */
   function logTransaction(type, qty, price, total) {
     const log = document.getElementById('tx-log');
 
-    // Retire le message "aucune transaction" s'il existe
     const empty = log.querySelector('p');
     if (empty) empty.remove();
 
@@ -710,7 +629,6 @@
     log.prepend(div);
   }
 
-  /** ACHAT */
   document.getElementById('btn-buy').addEventListener('click', () => {
     const qty  = parseFloat(document.getElementById('qty-input').value);
     if (!qty || qty <= 0) { feedback('Quantité invalide.', '#ff3d6b'); return; }
@@ -718,11 +636,8 @@
     const cost = qty * state.price;
     if (cost > state.cash) { feedback('Fonds insuffisants !', '#ff3d6b'); return; }
 
-    // Débit cash
     state.cash -= cost;
 
-    // Mise à jour du prix moyen d'achat (moyenne pondérée)
-    // Formule : avgBuy_new = (totalSpent + cost) / (holdings + qty)
     state.totalSpent += cost;
     state.holdings   += qty;
     state.avgBuy      = state.totalSpent / state.holdings;
@@ -732,7 +647,6 @@
     updateUI();
   });
 
-  /** VENTE */
   document.getElementById('btn-sell').addEventListener('click', () => {
     const qty = parseFloat(document.getElementById('qty-input').value);
     if (!qty || qty <= 0) { feedback('Quantité invalide.', '#ff3d6b'); return; }
@@ -740,15 +654,11 @@
 
     const proceeds = qty * state.price;
 
-    // Crédit cash
     state.cash += proceeds;
 
-    // Réduction des holdings proportionnelle
     const ratio      = qty / state.holdings;
     state.totalSpent -= state.totalSpent * ratio;
     state.holdings   -= qty;
-
-    // Réinitialise le prix moyen si tout vendu
     if (state.holdings < 1e-9) {
       state.holdings   = 0;
       state.avgBuy     = 0;
@@ -760,39 +670,28 @@
     updateUI();
   });
 
-  /** Boutons de pourcentage rapide (25%, 50%, 75%, MAX) */
   document.querySelectorAll('.quick-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const pct = parseFloat(btn.dataset.pct);
-      // Calcule la quantité maximale achetable avec ce % de cash
       const maxQty = (state.cash * pct) / state.price;
       document.getElementById('qty-input').value = maxQty.toFixed(6);
       updateUI();
     });
   });
 
-  /** Mise à jour du coût estimé à chaque changement de quantité */
   document.getElementById('qty-input').addEventListener('input', updateUI);
 
-  /* ──────────────────────────────────────────────────────────────────
-     9. SÉLECTION DE L'ACTIF (changement de crypto)
-  ────────────────────────────────────────────────────────────────── */
   document.querySelectorAll('.crypto-btn[data-crypto]').forEach(btn => {
     btn.addEventListener('click', () => {
-      // Met à jour le bouton actif
       document.querySelectorAll('.crypto-btn[data-crypto]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-
-      // Change l'actif et réinitialise le graphe
       state.crypto = btn.dataset.crypto;
       resetChart();
       initSimulation();
     });
   });
 
-  /* ──────────────────────────────────────────────────────────────────
-     10. RÉINITIALISATION
-  ────────────────────────────────────────────────────────────────── */
+
   function resetChart() {
     chart.data.labels                = [];
     chart.data.datasets[0].data      = [];
@@ -817,12 +716,7 @@
     resetChart();
     initSimulation();
   });
-
-  /* ──────────────────────────────────────────────────────────────────
-     11. DÉMARRAGE DE LA SIMULATION
-  ────────────────────────────────────────────────────────────────── */
   function initSimulation() {
-    // Arrête l'intervalle précédent
     if (state.intervalId) clearInterval(state.intervalId);
 
     const asset   = ASSETS[state.crypto];
@@ -831,12 +725,12 @@
     state.priceHigh = asset.startPrice;
     state.priceLow  = asset.startPrice;
 
-    // Premier tick immédiat, puis toutes les 800ms
+ 
     tick();
     state.intervalId = setInterval(tick, 800);
   }
 
-  // Lance la simulation au chargement
+
   initSimulation();
 
   </script>
